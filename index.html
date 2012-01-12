@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Video Puzzle</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+	<!-- script src="js/jquery-1.6.4.js"></script -->
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.0.6/modernizr.min.js"></script>
+	<!-- script src="js/modernizr-2.0.6.js"></script -->
+	<!-- All this for a text shadow in IE 9.0 !! -->
+	<script src="js/EventHelpers.js"></script>
+	<script src="js/textshadow.js"></script>
+	<script src="js/cssQuery-p.js"></script>
+	<script src="js/cssSandpaper.js"></script>
+	<!-- -->
+	<link href="css/reset.css" rel="stylesheet" media="all" />
+	<link href="css/puzzle.css" rel="stylesheet" media="all" />
+</head>
+<body>
+	<video id="video" style="display: none" onended="this.play()" autoplay loop>
+		<source src="assets/BigBuckBunny_640x360.mp4" type="video/mp4">
+		<source src="assets/BigBuckBunny_640x360.ogv" type="video/ogg">
+	</video>
+	<div id="puzzle">
+		<div id="tile-container">
+			<p id="no-dice" style="display: none">You need a <a href="http://alternativebrowseralliance.com/browsers.html">modern browser</a> to play.</p>
+		</div>
+		<a href="http://ian.sweet.uk.net" id="logo" class="shadow">net.uk.sweet</a>
+		<div id="controls">
+			<a href="#" id="mix" class="shadow">mix</a> 
+			<span class="shadow">|</span>
+			<a href="#" id="mute" class="shadow">mute</a>
+		</div>			
+	</div>
+	<script src="js/puzzle.js"></script>
+</body>
+</html>
