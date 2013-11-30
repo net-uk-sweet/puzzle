@@ -1,4 +1,8 @@
+/* globals $, Modernizr */
+
 $(function () {
+
+    'use strict';
 
     var createCanvas = function () {
 
@@ -8,20 +12,21 @@ $(function () {
         // Create a canvas to represent each tile and append to container
         for (var i = 0; i < (tileCount - 1); i++) {
 
-            id = "c" + i;
+            id = 'c' + i;
 
-            $canvas = $("<canvas></canvas>").attr({
+            $canvas = $('<canvas></canvas>').attr({
                 id: id,
                 width: tileWidth - 2,
                 height: tileHeight - 2
-            })
-            .click(function (e) {
-                move($(this));
             });
 
-            $("#tile-container").append($canvas);
+            $('#tile-container').append($canvas);
             canvases.push(id);
         }
+
+        $('canvas').click(function(/*e*/) {
+            move($(this));
+        });
 
         // This is the missing tile (not a canvas).
         canvases.push(blankTile);
@@ -43,10 +48,10 @@ $(function () {
             id = canvases[i];
 
             // Grab the canvas and position it.
-            if (id != blankTile) {
-                $("#" + id).css({
-                    left: left + "px",
-                    top: top + "px"
+            if (id !== blankTile) {
+                $('#' + id).css({
+                    left: left + 'px',
+                    top: top + 'px'
                 });
             }
 
@@ -74,18 +79,18 @@ $(function () {
         var x = 0;
         var y = 0;
 
-        $("canvas").each(function (index) {
+        $('canvas').each(function (index) {
 
             // Draw a chunk of video on this canvas
-            context = $(this)[0].getContext("2d");
+            context = $(this)[0].getContext('2d');
             context.drawImage($video[0], x, y, videoWidth, videoHeight);
 
             // console.log(context);
 
             // Put a number on the tile to make the puzzle a bit easier
-            context.fillStyle = "#272D31";
-            context.font = "16px san-serif"; ;
-            context.textBaseline = "bottom";
+            context.fillStyle = '#272D31';
+            context.font = '16px san-serif';
+            context.textBaseline = 'bottom';
             context.fillText(index + 1, 42, 60);
 
             // Calculate the position of the chunk of video associated 
@@ -105,28 +110,28 @@ $(function () {
     // Can the selected tile move?
     var move = function ($canvas) {
 
-        var id = $canvas.attr("id");
+        var id = $canvas.attr('id');
 
         // Need the position of the selected tile 
         // and the position of the blank (target)
         var position = getPosition(id);
         var target = getPosition(blankTile);
 
-        // console.log("Position: row: " + position.row + " col: " + position.col);
-        // console.log("Target: row: " + (target.row * TILE_HEIGHT) + " col: " + (target.col * TILE_WIDTH));
+        // console.log('Position: row: ' + position.row + ' col: ' + position.col);
+        // console.log('Target: row: ' + (target.row * TILE_HEIGHT) + ' col: ' + (target.col * TILE_WIDTH));
 
         // This feels a wee bit brute force ...
         // If we move one tile vertically or horizontally either side
         // do we encounter the blank tile?
-        if ((position.row + 1 == target.row && position.col == target.col)
-			|| (position.row - 1 == target.row && position.col == target.col)
-			|| (position.row == target.row && position.col - 1 == target.col)
-			|| (position.row == target.row && position.col + 1 == target.col)) {
+        if ((position.row + 1 === target.row && position.col === target.col) ||
+			(position.row - 1 === target.row && position.col === target.col) ||
+			(position.row === target.row && position.col - 1 === target.col) ||
+			(position.row === target.row && position.col + 1 === target.col)) {
 
             // Put the canvas where the blank was
             $canvas.css({
-                left: (target.col * tileWidth) + "px",
-                top: (target.row * tileHeight) + "px"
+                left: (target.col * tileWidth) + 'px',
+                top: (target.row * tileHeight) + 'px'
             });
 
             // And switch the canvas with the blank in the grid
@@ -138,7 +143,7 @@ $(function () {
     };
 
     var checkSolved = function () {
-        $mix.css("text-decoration", isSolved() ? "none" : "line-through");
+        $mix.css('text-decoration', isSolved() ? 'none' : 'line-through');
     };
 
     // Resets the grid to the correct sequence
@@ -146,8 +151,9 @@ $(function () {
 
         canvases = [];
 
-        for (var i = 0; i < (tileCount - 1); i++)
-            canvases[i] = "c" + i;
+        for (var i = 0; i < (tileCount - 1); i++) {
+            canvases[i] = 'c' + i;
+        }
 
         canvases[i] = blankTile;
         draw();
@@ -169,8 +175,9 @@ $(function () {
             r = row.length;
             for (var j = 0; j < r; j++) {
                 col = row[j];
-                if ((k < tileCount - 1) && col != "c" + k)
+                if ((k < tileCount - 1) && col !== 'c' + k) {
                     return false;
+                }
                 k++;
             }
         }
@@ -192,15 +199,16 @@ $(function () {
             r = row.length;
 
             for (var j = 0; j < r; j++) {
-                if (row[j] == id)
+                if (row[j] === id) {
                     return { row: i, col: j };
+                }
             }
         }
     };
 
     var shuffleArray = function (arr) {
-        for (var j, x, i = arr.length; i; j = parseInt(Math.random() * i),
-			x = arr[--i], arr[i] = arr[j], arr[j] = x);
+        for (var j, x, i = arr.length; i; j = parseInt(Math.random() * i, 10),
+			x = arr[--i], arr[i] = arr[j], arr[j] = x) {}
         return arr;
     };
 
@@ -217,17 +225,17 @@ $(function () {
         // Check browser capabilities first.
         // Does the user's browser support HTML video and canvas?
         if (Modernizr.video && Modernizr.canvas) {
-            console.log("Got HTML5 video and canvas");
+            console.log('Got HTML5 video and canvas');
 
             // We kick things off on play of the video
-            $video.bind("play", function (e) {
+            $video.bind('play', function(/*e*/) {
                 createCanvas();
                 draw();
                 update(); // called recursively on a timeout
             });
 
-            $mix.click(function (e) {
-                // console.log("toggle shuffle");
+            $mix.click(function(/*e*/) {
+                // console.log('toggle shuffle');
                 if (isSolved()) {
                     canvases = shuffleArray(canvases);
                     draw();
@@ -237,15 +245,19 @@ $(function () {
                 checkSolved();
             });
 
-            $("#mute").click(function (e) {
-                // console.log("toggle volume")
+            $('#mute').click(function(/*e*/) {
+                // console.log('toggle volume')
                 mute = !mute;
 
                 // jQuery.attr() doesn't seem to work here
                 $video[0].muted = mute;
-                $(this).css("text-decoration", mute ? "line-through" : "none");
+                $(this).css('text-decoration', mute ? 'line-through' : 'none');
             });
 
+            // Prefer normal video to user media
+            fallbackHandler();
+
+            /*
             if (Modernizr.prefixed('getUserMedia', navigator)) {
 
                 navigator.getUserMedia = navigator.getUserMedia 
@@ -264,12 +276,13 @@ $(function () {
                 }
             } else {
                 fallbackHandler();
-            }       
+            } 
+            */
             
         } else {
             // User's browser isn't up to the job
-            $("#no-dice").show();
-            $("#controls").hide();
+            $('#no-dice').show();
+            $('#controls').hide();
         }
     };
 
@@ -283,7 +296,7 @@ $(function () {
     var videoWidth = 630;
     var videoHeight = 360;
 
-    var blankTile = "blank";
+    var blankTile = 'blank';
     var mute = false;
     var canvases = [];
     var grid = [];
